@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Disaster Recovery Plan</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Disaster Recovery Plan</h1>
+    <p class="meta">Version 1.0 &middot; Last reviewed 2026-10-29 &middot; Targets: RTO 4 hours, RPO 1 hour</p>
+    <nav aria-label="Sections">
+      <a href="#backup">Backups</a>
+      <a href="#restore">Restore</a>
+      <a href="#contacts">Contacts</a>
+      <a href="#drill">Drill</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="backup">
+      <h2>Backup schedule and storage</h2>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Data</th><th>Frequency</th><th>Retention</th><th>Storage location</th></tr></thead>
+          <tbody>
+            <tr><td>Database</td><td>Daily full (2:00 AM) + hourly incremental</td><td>30 days</td><td>Primary server + cloud bucket (off-site)</td></tr>
+            <tr><td>App files and configs</td><td>Daily</td><td>14 days</td><td>Cloud bucket (versioned)</td></tr>
+            <tr><td>Full system image</td><td>Weekly (Sunday)</td><td>4 weeks</td><td>Off-site / secondary region</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">Backups are encrypted. A test restore runs monthly.</p>
+    </section>
+
+    <section id="restore">
+      <h2>Restore procedure</h2>
+      <p class="progress"><span id="done">0</span> of <span id="total">9</span> steps done</p>
+      <ol class="steps" id="steps">
+        <li><label><input type="checkbox"> <b>Detect and declare.</b> Confirm the incident and notify the DR lead.</label></li>
+        <li><label><input type="checkbox"> <b>Assess.</b> Identify affected systems and the last good backup.</label></li>
+        <li><label><input type="checkbox"> <b>Isolate.</b> Disconnect affected systems to stop further damage.</label></li>
+        <li><label><input type="checkbox"> <b>Provision.</b> Prepare a clean server or environment.</label></li>
+        <li><label><input type="checkbox"> <b>Restore data.</b> Apply the latest full backup, then the incrementals.</label></li>
+        <li><label><input type="checkbox"> <b>Restore app and config.</b> Redeploy application files and configuration.</label></li>
+        <li><label><input type="checkbox"> <b>Verify.</b> Check data integrity, run smoke tests, confirm user access.</label></li>
+        <li><label><input type="checkbox"> <b>Go live.</b> Switch traffic back and monitor for 24 hours.</label></li>
+        <li><label><input type="checkbox"> <b>Document.</b> Log the timeline and lessons learned.</label></li>
+      </ol>
+      <button type="button" id="reset">Clear checklist</button>
+    </section>
+
+    <section id="contacts">
+      <h2>Escalation contacts and communication plan</h2>
+      <div class="scroll">
+        <table>
+          <thead><tr><th>Level</th><th>Role</th><th>Name</th><th>Phone / email</th></tr></thead>
+          <tbody>
+            <tr><td>L1</td><td>System administrator</td><td>[Name]</td><td>[Phone / email]</td></tr>
+            <tr><td>L2</td><td>DR lead / project manager</td><td>[Name]</td><td>[Phone / email]</td></tr>
+            <tr><td>L3</td><td>Management / stakeholder</td><td>[Name]</td><td>[Phone / email]</td></tr>
+            <tr><td>Vendor</td><td>Cloud / hosting support</td><td>[Name]</td><td>[Phone / email]</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">L1 alerts L2 within 15 minutes. L2 informs L3 within 30 minutes. Stakeholders get an update every hour until resolved.</p>
+    </section>
+
+    <section id="drill">
+      <h2>Tabletop drill</h2>
+      <p><b>Scenario:</b> the primary database server fails after a corrupted update and users cannot log in.</p>
+      <form id="findingForm">
+        <label>Finding <input name="finding" required></label>
+        <label>Action item <input name="action" required></label>
+        <label>Owner <input name="owner" required></label>
+        <button type="submit">Add finding</button>
+      </form>
+      <div class="scroll">
+        <table id="findings">
+          <thead><tr><th>#</th><th>Finding</th><th>Action item</th><th>Owner</th></tr></thead>
+          <tbody><tr class="empty"><td colspan="4">No findings recorded yet. Add one after the drill.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer><p>See <a href="docs/DR_Documentation.pdf">the one-page PDF</a> and <a href="docs/Tabletop_Drill_Findings.md">the drill record template</a>.</p></footer>
+  <script src="js/script.js"></script>
+</body>
+</html>
